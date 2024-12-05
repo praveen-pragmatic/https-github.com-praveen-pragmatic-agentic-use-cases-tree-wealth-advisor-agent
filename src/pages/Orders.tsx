@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
+import { useSocket } from '../hooks/useSocket';
 import { format } from 'date-fns';
 import { CheckCircle, Clock, Package, AlertCircle } from 'lucide-react';
 
@@ -8,6 +9,9 @@ export function Orders() {
   const navigate = useNavigate();
   const orders = useStore((state) => state.orders);
   const user = useStore((state) => state.user);
+
+  // Initialize WebSocket connection
+  useSocket();
 
   if (!user) {
     navigate('/login');
@@ -33,7 +37,7 @@ export function Orders() {
         return {
           icon: <Package className="h-5 w-5 text-yellow-600" />,
           text: 'Preparing Your Order',
-          description: 'Your order is being prepared by our expert mixologists.',
+          description: 'Your order is being prepared by our expert team.',
           color: 'yellow'
         };
       case 'ready':
@@ -106,11 +110,6 @@ export function Orders() {
                   <p className="text-sm text-gray-500">
                     Ordered at {format(new Date(activeOrder.timestamp), 'PPp')}
                   </p>
-                  {activeOrder.price && (
-                    <p className="text-sm font-medium text-purple-600 mt-1">
-                      ${activeOrder.price.toFixed(2)}
-                    </p>
-                  )}
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
@@ -154,11 +153,6 @@ export function Orders() {
                     <p className="text-sm text-gray-500">
                       {format(new Date(order.timestamp), 'PPp')}
                     </p>
-                    {order.price && (
-                      <p className="text-sm font-medium text-purple-600">
-                        ${order.price.toFixed(2)}
-                      </p>
-                    )}
                     <div className="flex items-center gap-2">
                       {getStatusDetails(order.status).icon}
                       <span className={`text-sm text-${getStatusDetails(order.status).color}-600`}>
