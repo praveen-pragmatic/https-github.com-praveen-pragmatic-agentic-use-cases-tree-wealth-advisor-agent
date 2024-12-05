@@ -1,11 +1,11 @@
-name: Preview Deployment
+name: PR Build Check
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  preview:
+  build:
     runs-on: ubuntu-latest
     
     steps:
