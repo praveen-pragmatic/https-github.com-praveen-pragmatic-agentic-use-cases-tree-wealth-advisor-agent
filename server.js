@@ -28,8 +28,6 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-
-// Serve static files in production
 app.use(express.static('dist'));
 
 // Data storage paths
@@ -68,7 +66,13 @@ async function writeData(file, data) {
 io.on('connection', (socket) => {
   console.log('Client connected');
 
+  socket.on('get_orders', async () => {
+    const orders = await readData(ORDERS_FILE);
+    socket.emit('orders_updated', orders);
+  });
+
   socket.on('new_order', async (order) => {
+    console.log('New order received:', order);
     const orders = await readData(ORDERS_FILE);
     orders.push(order);
     await writeData(ORDERS_FILE, orders);
@@ -76,10 +80,17 @@ io.on('connection', (socket) => {
   });
 
   socket.on('update_order_status', async ({ orderId, status }) => {
+    console.log('Updating order status:', orderId, status);
     const orders = await readData(ORDERS_FILE);
-    const updatedOrders = orders.map(order =>
-      order.id === orderId ? { ...order, status } : order
-    );
+    const updatedOrders = orders.map(order => {
+      if (order.id === orderId) {
+        const updatedOrder = { ...order, status };
+        // Emit individual order update
+        io.emit('order_status_changed', updatedOrder);
+        return updatedOrder;
+      }
+      return order;
+    });
     await writeData(ORDERS_FILE, updatedOrders);
     io.emit('orders_updated', updatedOrders);
   });
