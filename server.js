@@ -11,7 +11,7 @@ const app = express();
 const server = createServer(app);
 
 const CORS_ORIGIN = process.env.NODE_ENV === 'production'
-  ? 'https://spiritz-app.onrender.com'
+  ? ['https://spiritz-app.onrender.com', 'https://spiritz-app.pages.dev']
   : 'http://localhost:5173';
 
 const io = new Server(server, {
@@ -19,22 +19,35 @@ const io = new Server(server, {
     origin: CORS_ORIGIN,
     methods: ['GET', 'POST'],
     credentials: true
-  }
+  },
+  pingTimeout: 60000,
+  pingInterval: 25000
 });
 
+// Middleware
 app.use(cors({
   origin: CORS_ORIGIN,
   credentials: true
 }));
 app.use(express.json());
+
+// Health check endpoint - responds quickly
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
+
+// Serve static files in production
 app.use(express.static('dist'));
 
+// Data storage paths
 const DATA_DIR = process.env.NODE_ENV === 'production' ? '/data' : join(__dirname, 'data');
 const ORDERS_FILE = join(DATA_DIR, 'orders.json');
 const USERS_FILE = join(DATA_DIR, 'users.json');
 
+// Ensure data directory exists
 await fs.mkdir(DATA_DIR, { recursive: true });
 
+// Initialize data files if they don't exist
 async function initDataFile(path, defaultData = []) {
   try {
     await fs.access(path);
@@ -48,15 +61,26 @@ await Promise.all([
   initDataFile(USERS_FILE)
 ]);
 
+// Data handlers
 async function readData(file) {
-  const data = await fs.readFile(file, 'utf8');
-  return JSON.parse(data);
+  try {
+    const data = await fs.readFile(file, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error(`Error reading ${file}:`, error);
+    return [];
+  }
 }
 
 async function writeData(file, data) {
-  await fs.writeFile(file, JSON.stringify(data, null, 2));
+  try {
+    await fs.writeFile(file, JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error(`Error writing to ${file}:`, error);
+  }
 }
 
+// WebSocket handlers
 io.on('connection', (socket) => {
   console.log('Client connected');
 
@@ -109,7 +133,29 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Catch-all route for SPA
+app.get('*', (req, res) => {
+  res.sendFile(join(__dirname, 'dist', 'index.html'));
+});
+
+// Start server
+const PORT = process.env.PORT || 10000;
+const HOST = '0.0.0.0';
+
+server.listen(PORT, HOST, () => {
+  console.log(`Server running on http://${HOST}:${PORT}`);
+});
+
+// Handle server errors
+server.on('error', (error) => {
+  console.error('Server error:', error);
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught exception:', error);
+});
+
+process.on('unhandledRejection', (error) => {
+  console.error('Unhandled rejection:', error);
 });
