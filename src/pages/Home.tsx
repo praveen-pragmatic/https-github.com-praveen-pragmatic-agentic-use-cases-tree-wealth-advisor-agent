@@ -22,11 +22,11 @@ export function Home() {
             className="max-w-2xl text-white"
           >
             <h1 className="text-5xl font-bold mb-6">
-              Craft Cocktails, Delivered to Your Table
+              Craft Cocktails, Gourmet Food Delivered to Your Table with love
             </h1>
             <p className="text-xl mb-8">
               Experience the perfect blend of tradition and innovation with our
-              handcrafted cocktails.
+              handcrafted cocktails and exquisite cuisine.
             </p>
             <Link
               to="/menu"
@@ -45,10 +45,9 @@ export function Home() {
             className="bg-white p-6 rounded-xl shadow-md"
           >
             <Sparkles className="h-12 w-12 text-purple-600 mb-4" />
-            <h3 className="text-xl font-bold mb-2">Premium Ingredients</h3>
+            <h3 className="text-xl font-bold mb-2">Premium Quality</h3>
             <p className="text-gray-600">
-              We use only the finest spirits and freshest ingredients in our
-              cocktails.
+              We use only the finest ingredients in our cocktails and dishes.
             </p>
           </motion.div>
           <motion.div
@@ -58,7 +57,7 @@ export function Home() {
             <Clock className="h-12 w-12 text-purple-600 mb-4" />
             <h3 className="text-xl font-bold mb-2">Quick Service</h3>
             <p className="text-gray-600">
-              Order from your table and we'll prepare your drinks right away.
+              Order from your table and we'll prepare your items right away.
             </p>
           </motion.div>
           <motion.div
@@ -66,9 +65,9 @@ export function Home() {
             className="bg-white p-6 rounded-xl shadow-md"
           >
             <Award className="h-12 w-12 text-purple-600 mb-4" />
-            <h3 className="text-xl font-bold mb-2">Expert Mixology</h3>
+            <h3 className="text-xl font-bold mb-2">Expert Craftsmanship</h3>
             <p className="text-gray-600">
-              Our skilled bartenders craft each drink with precision and care.
+              Our skilled team crafts each item with precision and care.
             </p>
           </motion.div>
         </div>

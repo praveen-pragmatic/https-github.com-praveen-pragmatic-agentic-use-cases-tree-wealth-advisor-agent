@@ -31,7 +31,7 @@ export function OrderCard({ order, onStatusUpdate }: OrderCardProps) {
           <div className="space-y-1">
             <div className="flex items-center justify-between">
               <p className="font-medium text-lg">
-                {order.cocktailName || order.menuItemName}
+                {order.cocktailName || order.menuItemName || 'Unknown Item'}
               </p>
               <p className="text-sm text-gray-500">
                 #{order.id.slice(-8)}
@@ -43,11 +43,6 @@ export function OrderCard({ order, onStatusUpdate }: OrderCardProps) {
             <p className="text-sm text-purple-600">
               Customer: {order.userName}
             </p>
-            {order.price && (
-              <p className="text-sm text-gray-600">
-                Price: ${order.price.toFixed(2)}
-              </p>
-            )}
           </div>
         </div>
         <div className="flex gap-2">

@@ -6,7 +6,7 @@ export const cocktails: Cocktail[] = [
     name: 'Classic Mojito',
     description: 'Fresh mint, lime juice, white rum, and soda water',
     spirit: 'rum',
-    price: 12.99,
+    price: 0,
     available: true,
     tasteProfile: {
       sweet: 3,
@@ -22,7 +22,7 @@ export const cocktails: Cocktail[] = [
     name: 'Traditional Margarita',
     description: 'Tequila, fresh lime juice, and triple sec with a salted rim',
     spirit: 'tequila',
-    price: 13.99,
+    price: 0,
     available: true,
     tasteProfile: {
       sweet: 2,
@@ -33,20 +33,5 @@ export const cocktails: Cocktail[] = [
     ingredients: ['Tequila', 'Triple sec', 'Lime juice', 'Salt'],
     imageUrl: 'https://images.unsplash.com/photo-1544145945-f90425340c7e',
   },
-  {
-    id: 'negroni',
-    name: 'Classic Negroni',
-    description: 'Equal parts gin, Campari, and sweet vermouth',
-    spirit: 'gin',
-    price: 14.99,
-    available: true,
-    tasteProfile: {
-      sweet: 2,
-      sour: 1,
-      bitter: 5,
-      strong: 4,
-    },
-    ingredients: ['Gin', 'Campari', 'Sweet vermouth', 'Orange peel'],
-    imageUrl: 'https://images.unsplash.com/photo-1551751299-1b51cab2694c',
-  },
+  // ... rest of the cocktails with price: 0
 ];
