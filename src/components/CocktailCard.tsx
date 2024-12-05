@@ -38,13 +38,10 @@ export function CocktailCard({ cocktail, onOrder }: CocktailCardProps) {
         <h3 className="text-xl font-semibold mb-2">{cocktail.name}</h3>
         <p className="text-gray-600 mb-4">{cocktail.description}</p>
         <div className="flex justify-between items-center">
-          <span className="text-lg font-bold text-purple-600">
-            ${cocktail.price.toFixed(2)}
-          </span>
           <button
             onClick={() => onOrder(cocktail)}
             disabled={isDisabled}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+            className={`w-full px-4 py-2 rounded-md text-sm font-medium transition-colors ${
               isDisabled
                 ? 'bg-gray-300 cursor-not-allowed text-gray-600'
                 : 'bg-purple-600 text-white hover:bg-purple-700'

@@ -28,22 +28,22 @@ export function OrderColumn({
           {orders.length}
         </span>
       </h2>
-      <div className="flex-1 min-h-[calc(100vh-12rem)] p-4 bg-gray-50 rounded-lg border-2 border-gray-200 overflow-y-auto">
-        {orders.length === 0 ? (
-          <div className="h-full flex items-center justify-center text-gray-400 text-sm">
-            No orders
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {orders.map((order) => (
+      <div className="flex-1 min-h-[calc(100vh-12rem)] p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 overflow-y-auto">
+        <div className="space-y-4">
+          {orders.length === 0 ? (
+            <div className="h-32 flex items-center justify-center text-gray-400 text-sm">
+              No orders
+            </div>
+          ) : (
+            orders.map((order) => (
               <OrderCard
                 key={order.id}
                 order={order}
                 onStatusUpdate={onStatusUpdate}
               />
-            ))}
-          </div>
-        )}
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
