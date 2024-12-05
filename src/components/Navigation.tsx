@@ -12,7 +12,7 @@ export function Navigation() {
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
             <Wine className="h-8 w-8 text-purple-600" />
-            <span className="text-xl font-bold text-gray-900">Spiritz</span>
+            <span className="text-xl font-bold text-gray-900">E1 - Spiritz & Smitheen</span>
           </Link>
 
           <div className="flex items-center space-x-4">

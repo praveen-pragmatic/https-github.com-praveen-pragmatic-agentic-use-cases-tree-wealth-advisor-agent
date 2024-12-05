@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { Clock, Package, CheckCircle } from 'lucide-react';
@@ -7,10 +7,10 @@ import { OrderStats } from '../components/admin/OrderStats';
 import {
   DndContext,
   DragEndEvent,
-  DragOverlay,
   closestCorners,
 } from '@dnd-kit/core';
 import type { Order } from '../types';
+import { useSocket } from '../hooks/useSocket';
 
 export function Admin() {
   const navigate = useNavigate();
@@ -20,8 +20,16 @@ export function Admin() {
     state.updateOrderStatus,
   ]);
 
+  // Initialize WebSocket connection
+  useSocket();
+
+  useEffect(() => {
+    if (!user || user.role !== 'admin') {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
   if (!user || user.role !== 'admin') {
-    navigate('/');
     return null;
   }
 
@@ -38,13 +46,13 @@ export function Admin() {
     if (!over) return;
 
     const orderId = active.id as string;
-    const container = over.id as Order['status'];
+    const newStatus = over.id as Order['status'];
 
-    if (container !== 'pending' && container !== 'preparing' && container !== 'ready') {
+    if (newStatus !== 'pending' && newStatus !== 'preparing' && newStatus !== 'ready' && newStatus !== 'delivered') {
       return;
     }
 
-    updateOrderStatus(orderId, container);
+    updateOrderStatus(orderId, newStatus);
   };
 
   const columns = [
@@ -69,6 +77,13 @@ export function Admin() {
       colorClass: 'text-green-600',
       orders: ordersByStatus.ready,
     },
+    {
+      title: 'Delivered',
+      icon: <CheckCircle className="h-5 w-5" />,
+      status: 'delivered' as const,
+      colorClass: 'text-blue-600',
+      orders: ordersByStatus.delivered,
+    },
   ];
 
   return (
@@ -82,7 +97,7 @@ export function Admin() {
         collisionDetection={closestCorners}
         onDragEnd={handleDragEnd}
       >
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-4 gap-6">
           {columns.map((column) => (
             <OrderColumn
               key={column.status}

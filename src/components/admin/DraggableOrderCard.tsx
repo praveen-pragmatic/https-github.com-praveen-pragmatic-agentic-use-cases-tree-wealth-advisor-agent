@@ -26,6 +26,21 @@ export function DraggableOrderCard({ order, onStatusUpdate }: DraggableOrderCard
     opacity: isDragging ? 0.5 : 1,
   };
 
+  const getStatusIcon = (status: Order['status']) => {
+    switch (status) {
+      case 'pending':
+        return <Clock className="h-5 w-5 text-purple-600" />;
+      case 'preparing':
+        return <Package className="h-5 w-5 text-yellow-600" />;
+      case 'ready':
+        return <CheckCircle className="h-5 w-5 text-green-600" />;
+      case 'delivered':
+        return <CheckCircle className="h-5 w-5 text-blue-600" />;
+      default:
+        return <XCircle className="h-5 w-5 text-red-600" />;
+    }
+  };
+
   return (
     <div
       ref={setNodeRef}
@@ -41,7 +56,7 @@ export function DraggableOrderCard({ order, onStatusUpdate }: DraggableOrderCard
             </button>
             <div>
               <p className="font-medium">
-                {order.cocktailName || order.menuItemName || `Order #${order.id.slice(-4)}`}
+                {order.cocktailName || order.menuItemName}
               </p>
               <p className="text-sm text-gray-500">
                 {format(new Date(order.timestamp), 'PPp')}
@@ -49,46 +64,45 @@ export function DraggableOrderCard({ order, onStatusUpdate }: DraggableOrderCard
               <p className="text-sm text-purple-600 mt-1">
                 Customer: {order.userName}
               </p>
+              {order.price && (
+                <p className="text-sm text-gray-600">
+                  Price: ${order.price.toFixed(2)}
+                </p>
+              )}
             </div>
           </div>
         </div>
         <div className="flex gap-2">
+          {getStatusIcon(order.status)}
           {order.status !== 'delivered' && order.status !== 'cancelled' && (
             <>
               {order.status === 'pending' && (
                 <button
                   onClick={() => onStatusUpdate(order.id, 'preparing')}
-                  className="text-blue-600 hover:text-blue-800"
+                  className="text-yellow-600 hover:text-yellow-800"
                   title="Start Preparing"
                 >
-                  <Clock className="h-5 w-5" />
+                  <Package className="h-5 w-5" />
                 </button>
               )}
               {order.status === 'preparing' && (
                 <button
                   onClick={() => onStatusUpdate(order.id, 'ready')}
-                  className="text-yellow-600 hover:text-yellow-800"
+                  className="text-green-600 hover:text-green-800"
                   title="Mark as Ready"
                 >
-                  <Package className="h-5 w-5" />
+                  <CheckCircle className="h-5 w-5" />
                 </button>
               )}
               {order.status === 'ready' && (
                 <button
                   onClick={() => onStatusUpdate(order.id, 'delivered')}
-                  className="text-green-600 hover:text-green-800"
+                  className="text-blue-600 hover:text-blue-800"
                   title="Mark as Delivered"
                 >
                   <CheckCircle className="h-5 w-5" />
                 </button>
               )}
-              <button
-                onClick={() => onStatusUpdate(order.id, 'cancelled')}
-                className="text-red-600 hover:text-red-800"
-                title="Cancel Order"
-              >
-                <XCircle className="h-5 w-5" />
-              </button>
             </>
           )}
         </div>

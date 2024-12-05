@@ -24,7 +24,7 @@ export function Menu() {
 
   const handleOrder = (item: Cocktail | MenuItem) => {
     const order = {
-      id: Math.random().toString(36).substr(2, 9),
+      id: `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       userId: user.id,
       userName: user.name,
       cocktailId: 'spirit' in item ? item.id : undefined,
@@ -33,6 +33,7 @@ export function Menu() {
       menuItemName: 'category' in item ? item.name : undefined,
       status: 'pending',
       timestamp: new Date().toISOString(),
+      price: item.price,
     };
     
     addOrder(order);

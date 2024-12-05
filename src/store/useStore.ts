@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import type { User, Cocktail, Order, MenuItem } from '../types';
 import { socketEmitters } from '../services/socket';
 import { getOrdersByStatus, hasActiveOrder, getUserById, getCocktailById } from '../utils/orderUtils';
+import { cocktails } from '../data/cocktails';
 
 interface Store {
   user: User | null;
@@ -25,24 +26,7 @@ interface Store {
 const initialState = {
   user: null,
   users: [],
-  cocktails: [
-    {
-      id: '1',
-      name: 'Classic Mojito',
-      description: 'Fresh mint, lime juice, rum, and soda water',
-      spirit: 'rum',
-      price: 12.99,
-      available: true,
-      tasteProfile: {
-        sweet: 3,
-        sour: 4,
-        bitter: 1,
-        strong: 3,
-      },
-      ingredients: ['White rum', 'Fresh mint', 'Lime juice', 'Sugar', 'Soda water'],
-      imageUrl: 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a',
-    }
-  ],
+  cocktails,
   orders: [],
   menuItems: []
 };
@@ -73,7 +57,12 @@ export const useStore = create<Store>()(
       },
       
       setOrders: (orders) => {
-        set((state) => ({ ...state, orders }));
+        set((state) => ({ 
+          ...state, 
+          orders: orders.sort((a, b) => 
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          ) 
+        }));
       },
       
       setCocktails: (cocktails) => {
@@ -81,8 +70,19 @@ export const useStore = create<Store>()(
       },
       
       addOrder: (order) => {
+        // Emit the order immediately
         socketEmitters.newOrder(order);
-        set((state) => ({ ...state, orders: [...state.orders, order] }));
+        
+        // Update local state
+        set((state) => ({ 
+          ...state, 
+          orders: [order, ...state.orders].sort((a, b) => 
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          )
+        }));
+
+        // Log for debugging
+        console.log('New order added:', order);
       },
       
       updateOrderStatus: (orderId, status) => {

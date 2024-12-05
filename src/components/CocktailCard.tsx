@@ -11,7 +11,10 @@ interface CocktailCardProps {
 export function CocktailCard({ cocktail, onOrder }: CocktailCardProps) {
   const user = useStore((state) => state.user);
   const hasActiveOrder = useStore((state) => 
-    user ? state.hasActiveOrder(user.id) : false
+    state.orders.some(order => 
+      order.userId === user?.id && 
+      !['delivered', 'cancelled'].includes(order.status)
+    )
   );
 
   const isDisabled = !cocktail.available || hasActiveOrder;
@@ -41,7 +44,11 @@ export function CocktailCard({ cocktail, onOrder }: CocktailCardProps) {
           <button
             onClick={() => onOrder(cocktail)}
             disabled={isDisabled}
-            className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              isDisabled
+                ? 'bg-gray-300 cursor-not-allowed text-gray-600'
+                : 'bg-purple-600 text-white hover:bg-purple-700'
+            }`}
           >
             {buttonText}
           </button>
