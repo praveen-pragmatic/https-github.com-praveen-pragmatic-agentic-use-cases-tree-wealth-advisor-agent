@@ -71,7 +71,7 @@ export function Admin() {
       orders: ordersByStatus.preparing,
     },
     {
-      title: 'Ready for Delivery',
+      title: 'Ready',
       icon: <CheckCircle className="h-5 w-5" />,
       status: 'ready' as const,
       colorClass: 'text-green-600',
@@ -88,7 +88,7 @@ export function Admin() {
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <h1 className="text-3xl font-bold text-gray-900">Order Management</h1>
         <OrderStats orders={ordersByStatus} />
       </div>
@@ -97,7 +97,7 @@ export function Admin() {
         collisionDetection={closestCorners}
         onDragEnd={handleDragEnd}
       >
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {columns.map((column) => (
             <OrderColumn
               key={column.status}

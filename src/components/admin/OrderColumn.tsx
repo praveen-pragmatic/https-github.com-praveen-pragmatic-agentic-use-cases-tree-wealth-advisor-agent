@@ -21,26 +21,35 @@ export function OrderColumn({
   colorClass
 }: OrderColumnProps) {
   return (
-    <div className="space-y-4">
-      <h2 className={`font-semibold text-lg ${colorClass} flex items-center gap-2`}>
+    <div className="flex flex-col h-full">
+      <h2 className={`font-semibold text-lg ${colorClass} flex items-center gap-2 mb-4`}>
         {icon}
-        {title}
+        <span>{title}</span>
+        <span className="ml-auto text-sm bg-gray-100 px-2 py-1 rounded-full">
+          {orders.length}
+        </span>
       </h2>
       <div
-        className="min-h-[200px] p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200"
+        className="flex-1 min-h-[calc(100vh-12rem)] p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 overflow-y-auto"
         id={status}
       >
         <SortableContext
           items={orders.map(order => order.id)}
           strategy={verticalListSortingStrategy}
         >
-          {orders.map((order) => (
-            <DraggableOrderCard
-              key={order.id}
-              order={order}
-              onStatusUpdate={onStatusUpdate}
-            />
-          ))}
+          {orders.length === 0 ? (
+            <div className="h-full flex items-center justify-center text-gray-400 text-sm">
+              No orders
+            </div>
+          ) : (
+            orders.map((order) => (
+              <DraggableOrderCard
+                key={order.id}
+                order={order}
+                onStatusUpdate={onStatusUpdate}
+              />
+            ))
+          )}
         </SortableContext>
       </div>
     </div>
