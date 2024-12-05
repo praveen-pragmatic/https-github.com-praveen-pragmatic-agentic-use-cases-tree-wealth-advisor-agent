@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useStore } from '../store/useStore';
-import { socket, createSocketListeners } from '../services/socket';
+import { socket } from '../services/socket';
 
 export function useSocket() {
   const setOrders = useStore((state) => state.setOrders);
@@ -8,35 +8,37 @@ export function useSocket() {
   const setUsers = useStore((state) => state.setUsers);
 
   useEffect(() => {
-    // Ensure socket is connected
-    if (!socket.connected) {
-      socket.connect();
-    }
-
-    // Request initial orders
+    // Request initial orders on connection
     socket.emit('get_orders');
 
-    const cleanup = createSocketListeners({
-      onOrdersUpdated: (orders) => {
-        console.log('Orders updated:', orders);
-        setOrders(orders);
-      },
-      onOrderStatusChanged: (order) => {
-        console.log('Order status changed:', order);
-        updateOrder(order);
-      },
-      onLoginSuccess: (user) => {
-        console.log('User login success:', user);
-        setUsers((prevUsers) => [...prevUsers.filter(u => u.id !== user.id), user]);
-      },
-      onError: (error) => {
-        console.error('Socket connection error:', error);
-      }
+    // Order updates
+    socket.on('orders_updated', (orders) => {
+      console.log('Orders updated:', orders);
+      setOrders(orders);
+    });
+
+    // Individual order status updates
+    socket.on('order_status_changed', (order) => {
+      console.log('Order status changed:', order);
+      updateOrder(order);
+    });
+
+    // User updates
+    socket.on('login_success', (user) => {
+      console.log('User login success:', user);
+      setUsers((prevUsers) => [...prevUsers.filter(u => u.id !== user.id), user]);
+    });
+
+    // Error handling
+    socket.on('connect_error', (error) => {
+      console.error('Socket connection error:', error);
     });
 
     return () => {
-      cleanup();
-      // Don't disconnect socket on cleanup to maintain connection
+      socket.off('orders_updated');
+      socket.off('order_status_changed');
+      socket.off('login_success');
+      socket.off('connect_error');
     };
   }, [setOrders, updateOrder, setUsers]);
 }
