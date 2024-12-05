@@ -1,7 +1,7 @@
 import type { Cocktail } from '../types';
 
 export const cocktails: Cocktail[] = [
-  // Gin Cocktails
+  // GIN Cocktails
   {
     id: 'gin-tonic',
     name: 'Gin & Tonic',
@@ -11,8 +11,8 @@ export const cocktails: Cocktail[] = [
     available: true,
     tasteProfile: {
       sweet: 2,
-      sour: 3,
-      bitter: 4,
+      sour: 2,
+      bitter: 3,
       strong: 3,
     },
     ingredients: ['Premium Gin', 'Tonic Water', 'Lime'],
@@ -29,7 +29,7 @@ export const cocktails: Cocktail[] = [
       sweet: 2,
       sour: 4,
       bitter: 1,
-      strong: 4,
+      strong: 3,
     },
     ingredients: ['Gin', 'Lime Juice', 'Simple Syrup'],
     imageUrl: 'https://images.unsplash.com/photo-1613461920867-9ea115fee2b6',
@@ -54,7 +54,7 @@ export const cocktails: Cocktail[] = [
     id: 'moscow-mule',
     name: 'Moscow Mule',
     description: 'Vodka-based cocktail with ginger beer and lime',
-    spirit: 'vodka',
+    spirit: 'gin',
     price: 0,
     available: true,
     tasteProfile: {
@@ -66,7 +66,7 @@ export const cocktails: Cocktail[] = [
     ingredients: ['Vodka', 'Ginger Beer', 'Lime Juice'],
     imageUrl: 'https://images.unsplash.com/photo-1530991808291-7e157454758c',
   },
-  // Vodka Cocktails
+  // VODKA Cocktails
   {
     id: 'cosmopolitan',
     name: 'Cosmopolitan',
@@ -76,7 +76,7 @@ export const cocktails: Cocktail[] = [
     available: true,
     tasteProfile: {
       sweet: 3,
-      sour: 4,
+      sour: 3,
       bitter: 1,
       strong: 3,
     },
@@ -99,7 +99,23 @@ export const cocktails: Cocktail[] = [
     ingredients: ['Vodka', 'Espresso', 'Coffee Liqueur'],
     imageUrl: 'https://images.unsplash.com/photo-1545438102-799c3991ffb2',
   },
-  // Whiskey Cocktails
+  {
+    id: 'chilli-vodka',
+    name: 'Chilli Vodka',
+    description: 'Spicy vodka cocktail with a kick',
+    spirit: 'vodka',
+    price: 0,
+    available: true,
+    tasteProfile: {
+      sweet: 1,
+      sour: 1,
+      bitter: 2,
+      strong: 5,
+    },
+    ingredients: ['Vodka', 'Chilli', 'Lime'],
+    imageUrl: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b',
+  },
+  // WHISKEY Cocktails
   {
     id: 'godfather',
     name: 'Godfather',
@@ -132,10 +148,10 @@ export const cocktails: Cocktail[] = [
     ingredients: ['Bourbon', 'Angostura Bitters', 'Sugar'],
     imageUrl: 'https://images.unsplash.com/photo-1638990742994-c96e4f7617fe',
   },
-  // Rum Cocktails
+  // RUM Cocktails
   {
     id: 'highball',
-    name: 'Rum Highball',
+    name: 'Highball',
     description: 'Refreshing mix of rum and soda',
     spirit: 'rum',
     price: 0,
