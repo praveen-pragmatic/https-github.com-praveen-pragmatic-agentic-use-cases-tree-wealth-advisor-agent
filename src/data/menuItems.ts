@@ -1,0 +1,111 @@
+import type { MenuItem } from '../types';
+
+export const menuItems: MenuItem[] = [
+  // Salads & Dips
+  {
+    id: 'salad-1',
+    name: 'The Capresse Salad',
+    description: 'Fresh mozzarella, tomatoes, and basil with balsamic glaze',
+    price: 12.99,
+    category: 'salads',
+    available: true,
+    imageUrl: 'https://images.unsplash.com/photo-1592417817098-8fd3d9eb14a5',
+    isVegetarian: true,
+  },
+  {
+    id: 'salad-2',
+    name: 'Coin Pita with Dips',
+    description: 'Warm pita coins served with hummus, baba ganoush, and toum',
+    price: 14.99,
+    category: 'salads',
+    available: true,
+    imageUrl: 'https://images.unsplash.com/photo-1577906096429-f73c2c312435',
+    isVegetarian: true,
+  },
+  {
+    id: 'salad-3',
+    name: 'Grilled Hungarian Wax Chilli',
+    description: 'Charred peppers with olive oil and sea salt',
+    price: 10.99,
+    category: 'salads',
+    available: true,
+    imageUrl: 'https://images.unsplash.com/photo-1590590470233-195e8f23fe6d',
+    isSpicy: true,
+    isVegetarian: true,
+  },
+
+  // Entrees
+  {
+    id: 'entree-1',
+    name: 'Lamb Cutlets',
+    description: 'Grilled lamb cutlets with herbs and garlic',
+    price: 24.99,
+    category: 'entrees',
+    available: true,
+    imageUrl: 'https://images.unsplash.com/photo-1602847213180-50e43a80bef4',
+  },
+  {
+    id: 'entree-2',
+    name: 'Gourmet Potato Crisps',
+    description: 'House-made potato chips with truffle salt',
+    price: 8.99,
+    category: 'entrees',
+    available: true,
+    imageUrl: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b',
+    isVegetarian: true,
+  },
+
+  // Mains
+  {
+    id: 'main-1',
+    name: 'Idli & Meen Mulakittadhu',
+    description: 'Steamed rice cakes with spicy fish curry',
+    price: 22.99,
+    category: 'mains',
+    available: true,
+    imageUrl: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc',
+    isSpicy: true,
+  },
+  {
+    id: 'main-2',
+    name: 'Barotta & Pepper Chicken',
+    description: 'Flaky flatbread with spicy pepper chicken curry',
+    price: 24.99,
+    category: 'mains',
+    available: true,
+    imageUrl: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe',
+    isSpicy: true,
+  },
+
+  // Desserts
+  {
+    id: 'dessert-1',
+    name: 'Tiramisu',
+    description: 'Classic Italian dessert with coffee and mascarpone',
+    price: 10.99,
+    category: 'desserts',
+    available: true,
+    imageUrl: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9',
+    isVegetarian: true,
+  },
+  {
+    id: 'dessert-2',
+    name: 'Jelly & Ice Cream',
+    description: 'House-made jelly with vanilla ice cream',
+    price: 8.99,
+    category: 'desserts',
+    available: true,
+    imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777',
+    isVegetarian: true,
+  },
+  {
+    id: 'dessert-3',
+    name: 'Meeta Pan',
+    description: 'Sweet betel leaf with aromatic spices',
+    price: 6.99,
+    category: 'desserts',
+    available: true,
+    imageUrl: 'https://images.unsplash.com/photo-1605197584281-16bcbe3aae5e',
+    isVegetarian: true,
+  },
+];
