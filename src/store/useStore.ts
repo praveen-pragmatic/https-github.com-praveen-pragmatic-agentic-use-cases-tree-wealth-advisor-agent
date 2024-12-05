@@ -2,15 +2,12 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { User, Cocktail, Order, MenuItem } from '../types';
 import { socketEmitters } from '../services/socket';
-import { cocktails as initialCocktails } from '../data/cocktails';
-import { menuItems as initialMenuItems } from '../data/menuItems';
+import { cocktails } from '../data/cocktails';
 
 interface Store {
   user: User | null;
   users: User[];
   orders: Order[];
-  cocktails: Cocktail[];
-  menuItems: MenuItem[];
   setUser: (user: User | null) => void;
   setUsers: (users: User[] | ((prev: User[]) => User[])) => void;
   setOrders: (orders: Order[]) => void;
@@ -18,11 +15,6 @@ interface Store {
   updateOrder: (order: Order) => void;
   updateOrderStatus: (orderId: string, status: Order['status']) => void;
   hasActiveOrder: (userId: string) => boolean;
-  toggleItemAvailability: (itemId: string, type: 'cocktail' | 'menuItem') => void;
-  addMenuItem: (item: MenuItem) => void;
-  addCocktail: (cocktail: Cocktail) => void;
-  deleteMenuItem: (itemId: string, type: 'cocktail' | 'menuItem') => void;
-  updateMenuItem: (item: MenuItem | Cocktail) => void;
 }
 
 export const useStore = create<Store>()(
@@ -31,8 +23,6 @@ export const useStore = create<Store>()(
       user: null,
       users: [],
       orders: [],
-      cocktails: initialCocktails,
-      menuItems: initialMenuItems,
       
       setUser: (user) => {
         set({ user });
@@ -78,76 +68,12 @@ export const useStore = create<Store>()(
           !['delivered', 'cancelled'].includes(order.status)
         );
       },
-
-      toggleItemAvailability: (itemId, type) => {
-        set((state) => {
-          if (type === 'cocktail') {
-            return {
-              cocktails: state.cocktails.map(item =>
-                item.id === itemId ? { ...item, available: !item.available } : item
-              )
-            };
-          } else {
-            return {
-              menuItems: state.menuItems.map(item =>
-                item.id === itemId ? { ...item, available: !item.available } : item
-              )
-            };
-          }
-        });
-      },
-
-      addMenuItem: (item) => {
-        set((state) => ({
-          menuItems: [...state.menuItems, item]
-        }));
-      },
-
-      addCocktail: (cocktail) => {
-        set((state) => ({
-          cocktails: [...state.cocktails, cocktail]
-        }));
-      },
-
-      deleteMenuItem: (itemId, type) => {
-        set((state) => {
-          if (type === 'cocktail') {
-            return {
-              cocktails: state.cocktails.filter(item => item.id !== itemId)
-            };
-          } else {
-            return {
-              menuItems: state.menuItems.filter(item => item.id !== itemId)
-            };
-          }
-        });
-      },
-
-      updateMenuItem: (updatedItem) => {
-        set((state) => {
-          if ('spirit' in updatedItem) {
-            return {
-              cocktails: state.cocktails.map(item =>
-                item.id === updatedItem.id ? updatedItem as Cocktail : item
-              )
-            };
-          } else {
-            return {
-              menuItems: state.menuItems.map(item =>
-                item.id === updatedItem.id ? updatedItem as MenuItem : item
-              )
-            };
-          }
-        });
-      },
     }),
     {
       name: 'spiritz-storage',
       partialize: (state) => ({
         user: state.user,
         users: state.users,
-        cocktails: state.cocktails,
-        menuItems: state.menuItems,
       }),
     }
   )

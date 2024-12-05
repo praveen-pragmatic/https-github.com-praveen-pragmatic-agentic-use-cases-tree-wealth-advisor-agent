@@ -7,7 +7,6 @@ import { Orders } from './pages/Orders';
 import { Profile } from './pages/Profile';
 import { Login } from './pages/Login';
 import { Admin } from './pages/Admin';
-import { MenuManagement } from './pages/MenuManagement';
 import { useStore } from './store/useStore';
 
 function ProtectedAdminRoute({ children }: { children: React.ReactNode }) {
@@ -35,14 +34,6 @@ export default function App() {
             element={
               <ProtectedAdminRoute>
                 <Admin />
-              </ProtectedAdminRoute>
-            }
-          />
-          <Route
-            path="menu-management"
-            element={
-              <ProtectedAdminRoute>
-                <MenuManagement />
               </ProtectedAdminRoute>
             }
           />
