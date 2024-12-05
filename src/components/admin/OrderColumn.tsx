@@ -1,6 +1,5 @@
 import React from 'react';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { DraggableOrderCard } from './DraggableOrderCard';
+import { OrderCard } from './OrderCard';
 import type { Order } from '../../types';
 
 interface OrderColumnProps {
@@ -29,28 +28,22 @@ export function OrderColumn({
           {orders.length}
         </span>
       </h2>
-      <div
-        className="flex-1 min-h-[calc(100vh-12rem)] p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 overflow-y-auto"
-        id={status}
-      >
-        <SortableContext
-          items={orders.map(order => order.id)}
-          strategy={verticalListSortingStrategy}
-        >
-          {orders.length === 0 ? (
-            <div className="h-full flex items-center justify-center text-gray-400 text-sm">
-              No orders
-            </div>
-          ) : (
-            orders.map((order) => (
-              <DraggableOrderCard
+      <div className="flex-1 min-h-[calc(100vh-12rem)] p-4 bg-gray-50 rounded-lg border-2 border-gray-200 overflow-y-auto">
+        {orders.length === 0 ? (
+          <div className="h-full flex items-center justify-center text-gray-400 text-sm">
+            No orders
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {orders.map((order) => (
+              <OrderCard
                 key={order.id}
                 order={order}
                 onStatusUpdate={onStatusUpdate}
               />
-            ))
-          )}
-        </SortableContext>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

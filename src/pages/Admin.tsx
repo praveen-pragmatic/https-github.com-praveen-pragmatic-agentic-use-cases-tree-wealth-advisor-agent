@@ -1,15 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { Clock, Package, CheckCircle } from 'lucide-react';
 import { OrderColumn } from '../components/admin/OrderColumn';
 import { OrderStats } from '../components/admin/OrderStats';
-import {
-  DndContext,
-  DragEndEvent,
-  closestCorners,
-} from '@dnd-kit/core';
-import type { Order } from '../types';
 import { useSocket } from '../hooks/useSocket';
 
 export function Admin() {
@@ -23,13 +17,8 @@ export function Admin() {
   // Initialize WebSocket connection
   useSocket();
 
-  useEffect(() => {
-    if (!user || user.role !== 'admin') {
-      navigate('/');
-    }
-  }, [user, navigate]);
-
   if (!user || user.role !== 'admin') {
+    navigate('/');
     return null;
   }
 
@@ -38,21 +27,6 @@ export function Admin() {
     preparing: orders.filter((order) => order.status === 'preparing'),
     ready: orders.filter((order) => order.status === 'ready'),
     delivered: orders.filter((order) => order.status === 'delivered'),
-  };
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    
-    if (!over) return;
-
-    const orderId = active.id as string;
-    const newStatus = over.id as Order['status'];
-
-    if (newStatus !== 'pending' && newStatus !== 'preparing' && newStatus !== 'ready' && newStatus !== 'delivered') {
-      return;
-    }
-
-    updateOrderStatus(orderId, newStatus);
   };
 
   const columns = [
@@ -64,7 +38,7 @@ export function Admin() {
       orders: ordersByStatus.pending,
     },
     {
-      title: 'In Progress',
+      title: 'Preparing',
       icon: <Package className="h-5 w-5" />,
       status: 'preparing' as const,
       colorClass: 'text-yellow-600',
@@ -93,20 +67,15 @@ export function Admin() {
         <OrderStats orders={ordersByStatus} />
       </div>
 
-      <DndContext
-        collisionDetection={closestCorners}
-        onDragEnd={handleDragEnd}
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {columns.map((column) => (
-            <OrderColumn
-              key={column.status}
-              {...column}
-              onStatusUpdate={updateOrderStatus}
-            />
-          ))}
-        </div>
-      </DndContext>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {columns.map((column) => (
+          <OrderColumn
+            key={column.status}
+            {...column}
+            onStatusUpdate={updateOrderStatus}
+          />
+        ))}
+      </div>
     </div>
   );
 }

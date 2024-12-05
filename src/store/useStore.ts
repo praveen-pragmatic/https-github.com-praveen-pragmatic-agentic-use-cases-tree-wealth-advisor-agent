@@ -16,6 +16,7 @@ interface Store {
   setOrders: (orders: Order[]) => void;
   setCocktails: (cocktails: Cocktail[]) => void;
   addOrder: (order: Order) => void;
+  updateOrder: (order: Order) => void;
   updateOrderStatus: (orderId: string, status: Order['status']) => void;
   hasActiveOrder: (userId: string) => boolean;
   getOrdersByStatus: () => ReturnType<typeof getOrdersByStatus>;
@@ -23,18 +24,14 @@ interface Store {
   getCocktailById: (cocktailId: string) => Cocktail | undefined;
 }
 
-const initialState = {
-  user: null,
-  users: [],
-  cocktails,
-  orders: [],
-  menuItems: []
-};
-
 export const useStore = create<Store>()(
   persist(
     (set, get) => ({
-      ...initialState,
+      user: null,
+      users: [],
+      cocktails,
+      orders: [],
+      menuItems: [],
       
       setUser: (user) => {
         set((state) => ({
@@ -72,15 +69,22 @@ export const useStore = create<Store>()(
       
       addOrder: (order) => {
         console.log('Adding new order:', order);
-        // Emit the order immediately
         socketEmitters.newOrder(order);
         
-        // Update local state
         set((state) => ({ 
           ...state, 
           orders: [order, ...state.orders].sort((a, b) => 
             new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
           )
+        }));
+      },
+
+      updateOrder: (updatedOrder) => {
+        set((state) => ({
+          ...state,
+          orders: state.orders.map((order) =>
+            order.id === updatedOrder.id ? updatedOrder : order
+          ),
         }));
       },
       

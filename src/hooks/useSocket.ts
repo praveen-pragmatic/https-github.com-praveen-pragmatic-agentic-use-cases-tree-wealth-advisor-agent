@@ -4,6 +4,7 @@ import { socket, createSocketListeners } from '../services/socket';
 
 export function useSocket() {
   const setOrders = useStore((state) => state.setOrders);
+  const updateOrder = useStore((state) => state.updateOrder);
   const setUsers = useStore((state) => state.setUsers);
 
   useEffect(() => {
@@ -12,10 +13,17 @@ export function useSocket() {
       socket.connect();
     }
 
+    // Request initial orders
+    socket.emit('get_orders');
+
     const cleanup = createSocketListeners({
       onOrdersUpdated: (orders) => {
         console.log('Orders updated:', orders);
         setOrders(orders);
+      },
+      onOrderStatusChanged: (order) => {
+        console.log('Order status changed:', order);
+        updateOrder(order);
       },
       onLoginSuccess: (user) => {
         console.log('User login success:', user);
@@ -30,5 +38,5 @@ export function useSocket() {
       cleanup();
       // Don't disconnect socket on cleanup to maintain connection
     };
-  }, [setOrders, setUsers]);
+  }, [setOrders, updateOrder, setUsers]);
 }
