@@ -28,10 +28,3 @@ jobs:
           NODE_ENV: production
           VITE_WS_URL: ${{ secrets.VITE_WS_URL }}
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
-
-      - name: Deploy to production
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=spiritz-app
