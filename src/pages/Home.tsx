@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, Clock, Award } from 'lucide-react';
+import { Sparkles, Clock, Award, Wine } from 'lucide-react';
+import { TasteProfileQuiz } from '../components/TasteProfileQuiz';
+import { useStore } from '../store/useStore';
 
 export function Home() {
+  const user = useStore((state) => state.user);
+
   return (
     <div className="space-y-16">
       <section className="relative h-[600px] flex items-center">
@@ -37,6 +41,24 @@ export function Home() {
           </motion.div>
         </div>
       </section>
+
+      {!user?.preferences?.tasteProfile && (
+        <section className="container mx-auto px-4">
+          <div className="bg-purple-50 rounded-xl p-8 shadow-lg">
+            <div className="text-center mb-8">
+              <Wine className="h-12 w-12 text-purple-600 mx-auto mb-4" />
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Discover Your Perfect Cocktail
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Take our quick taste profile quiz to get personalized cocktail recommendations
+                based on your preferences. We'll match you with drinks that suit your palate perfectly.
+              </p>
+            </div>
+            <TasteProfileQuiz />
+          </div>
+        </section>
+      )}
 
       <section className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8">

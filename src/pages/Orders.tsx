@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { useSocket } from '../hooks/useSocket';
 import { format } from 'date-fns';
-import { CheckCircle, Clock, Package, AlertCircle } from 'lucide-react';
+import { CheckCircle, Clock, Package, AlertCircle, ArrowLeft } from 'lucide-react';
 import { Notification } from '../components/Notification';
 
 export function Orders() {
@@ -26,7 +26,6 @@ export function Orders() {
     return null;
   }
 
-  // Rest of the component remains the same...
   const userOrders = orders.filter((order) => order.userId === user.id);
   const activeOrder = userOrders.find(order => 
     !['delivered', 'cancelled'].includes(order.status)
@@ -79,6 +78,16 @@ export function Orders() {
     }
   };
 
+  const renderBackToMenuButton = () => (
+    <button
+      onClick={() => navigate('/menu')}
+      className="flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+    >
+      <ArrowLeft className="h-5 w-5" />
+      Back to Menu
+    </button>
+  );
+
   return (
     <>
       {notification && (
@@ -91,7 +100,7 @@ export function Orders() {
       <div className="max-w-4xl mx-auto space-y-8 px-4">
         <h1 className="text-3xl font-bold text-gray-900">Your Orders</h1>
         
-        {activeOrder && (
+        {activeOrder ? (
           <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-purple-100">
             <div className="bg-purple-50 px-6 py-4 border-b border-purple-100">
               <h2 className="text-xl font-semibold text-purple-900">Active Order</h2>
@@ -126,22 +135,15 @@ export function Orders() {
               </div>
             </div>
           </div>
-        )}
-
-        {!activeOrder && !userOrders.length && (
+        ) : (
           <div className="min-h-[60vh] flex flex-col items-center justify-center">
             <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-              No orders yet
+              No active orders
             </h2>
             <p className="text-gray-500 mb-8">
-              Visit our menu to place your first order!
+              Ready to place a new order?
             </p>
-            <button
-              onClick={() => navigate('/menu')}
-              className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors"
-            >
-              View Menu
-            </button>
+            {renderBackToMenuButton()}
           </div>
         )}
 
@@ -179,6 +181,11 @@ export function Orders() {
                         {getStatusDetails(order.status).text}
                       </div>
                     </div>
+                    {order.status === 'delivered' && (
+                      <div className="mt-4 flex justify-end">
+                        {renderBackToMenuButton()}
+                      </div>
+                    )}
                   </div>
                 ))}
             </div>
