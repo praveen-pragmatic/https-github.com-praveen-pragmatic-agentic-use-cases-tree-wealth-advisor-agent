@@ -1,8 +1,13 @@
 import { useEffect } from 'react';
 import { useStore } from '../store/useStore';
 import { socket } from '../services/socket';
+import type { Order } from '../types';
 
-export function useSocket() {
+interface UseSocketProps {
+  onOrderStatusChanged?: (order: Order) => void;
+}
+
+export function useSocket({ onOrderStatusChanged }: UseSocketProps = {}) {
   const setOrders = useStore((state) => state.setOrders);
   const updateOrder = useStore((state) => state.updateOrder);
   const setUsers = useStore((state) => state.setUsers);
@@ -21,6 +26,7 @@ export function useSocket() {
     socket.on('order_status_changed', (order) => {
       console.log('Order status changed:', order);
       updateOrder(order);
+      onOrderStatusChanged?.(order);
     });
 
     // User updates
@@ -40,5 +46,5 @@ export function useSocket() {
       socket.off('login_success');
       socket.off('connect_error');
     };
-  }, [setOrders, updateOrder, setUsers]);
+  }, [setOrders, updateOrder, setUsers, onOrderStatusChanged]);
 }
