@@ -32,17 +32,19 @@ export function Home() {
               Experience the perfect blend of tradition and innovation with our
               handcrafted cocktails and exquisite cuisine.
             </p>
-            <Link
-              to="/menu"
-              className="bg-purple-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-purple-700 transition-colors"
-            >
-              View Menu
-            </Link>
+            {!user && (
+              <Link
+                to="/login"
+                className="bg-purple-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-purple-700 transition-colors"
+              >
+                Get Started
+              </Link>
+            )}
           </motion.div>
         </div>
       </section>
 
-      {!user?.preferences?.tasteProfile && (
+      {user && !user.preferences?.tasteProfile && (
         <section className="container mx-auto px-4">
           <div className="bg-purple-50 rounded-xl p-8 shadow-lg">
             <div className="text-center mb-8">
