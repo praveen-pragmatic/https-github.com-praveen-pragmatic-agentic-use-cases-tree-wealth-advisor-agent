@@ -11,7 +11,8 @@ export const socket = io(wsUrl, {
   reconnectionDelay: 1000,
   reconnectionDelayMax: 5000,
   reconnectionAttempts: 5,
-  timeout: 20000
+  timeout: 20000,
+  autoConnect: true
 }) as unknown as SocketIOClient.Socket & {
   emit: <Ev extends keyof SocketEvents>(
     event: Ev,
@@ -54,3 +55,8 @@ socket.on('reconnect_error', (error) => {
 socket.on('reconnect_failed', () => {
   console.error('WebSocket reconnection failed after all attempts');
 });
+
+// Ensure socket is connected
+if (!socket.connected) {
+  socket.connect();
+}

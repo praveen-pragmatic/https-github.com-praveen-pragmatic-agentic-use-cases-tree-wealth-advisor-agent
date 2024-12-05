@@ -57,6 +57,7 @@ export const useStore = create<Store>()(
       },
       
       setOrders: (orders) => {
+        console.log('Setting orders:', orders);
         set((state) => ({ 
           ...state, 
           orders: orders.sort((a, b) => 
@@ -70,6 +71,7 @@ export const useStore = create<Store>()(
       },
       
       addOrder: (order) => {
+        console.log('Adding new order:', order);
         // Emit the order immediately
         socketEmitters.newOrder(order);
         
@@ -80,12 +82,10 @@ export const useStore = create<Store>()(
             new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
           )
         }));
-
-        // Log for debugging
-        console.log('New order added:', order);
       },
       
       updateOrderStatus: (orderId, status) => {
+        console.log('Updating order status:', orderId, status);
         socketEmitters.updateOrderStatus({ orderId, status });
         set((state) => ({
           ...state,

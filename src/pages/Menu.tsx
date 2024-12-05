@@ -36,6 +36,7 @@ export function Menu() {
       price: item.price,
     };
     
+    console.log('Creating new order:', order);
     addOrder(order);
     navigate('/orders');
   };
