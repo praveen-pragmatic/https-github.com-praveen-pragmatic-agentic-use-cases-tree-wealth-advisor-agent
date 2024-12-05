@@ -7,6 +7,7 @@ import { CocktailCard } from '../components/CocktailCard';
 import { MenuSection } from '../components/MenuSection';
 import { TasteProfileQuiz } from '../components/TasteProfileQuiz';
 import { menuItems } from '../data/menuItems';
+import { cocktails } from '../data/cocktails';
 import type { Cocktail, MenuItem } from '../types';
 
 export function Menu() {
@@ -49,10 +50,12 @@ export function Menu() {
             Take our quick quiz to help us understand your taste preferences
           </p>
         </div>
-        <TasteProfileQuiz onComplete={() => setShowQuiz(false)} />
+        <TasteProfileQuiz />
       </div>
     );
   }
+
+  const foodCategories = Array.from(new Set(menuItems.map(item => item.category)));
 
   return (
     <div className="space-y-8">
@@ -94,7 +97,28 @@ export function Menu() {
         </div>
       </div>
 
-      {/* Rest of the menu rendering code remains the same */}
+      {activeTab === 'drinks' ? (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {cocktails.map((cocktail) => (
+            <CocktailCard
+              key={cocktail.id}
+              cocktail={cocktail}
+              onOrder={handleOrder}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-12">
+          {foodCategories.map((category) => (
+            <MenuSection
+              key={category}
+              title={category.charAt(0).toUpperCase() + category.slice(1)}
+              items={menuItems.filter((item) => item.category === category)}
+              onOrder={handleOrder}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
