@@ -32,7 +32,94 @@ const quizQuestions = [
       }
     ]
   },
-  // ... rest of the questions remain the same
+  {
+    id: 2,
+    question: "How do you feel about sour flavors?",
+    options: [
+      {
+        text: "Love sour! 🍋",
+        value: { sour: 5, sweet: 1 }
+      },
+      {
+        text: "Moderately sour 🌶️",
+        value: { sour: 3, sweet: 2 }
+      },
+      {
+        text: "Slightly sour 🍊",
+        value: { sour: 2, sweet: 3 }
+      },
+      {
+        text: "No sour please 🚫",
+        value: { sour: 0, sweet: 4 }
+      }
+    ]
+  },
+  {
+    id: 3,
+    question: "How about bitter tastes?",
+    options: [
+      {
+        text: "Love bitter flavors! ☕",
+        value: { bitter: 5, strong: 3 }
+      },
+      {
+        text: "Some bitterness is nice 🍫",
+        value: { bitter: 3, strong: 2 }
+      },
+      {
+        text: "Very little bitterness 🍯",
+        value: { bitter: 1, sweet: 3 }
+      },
+      {
+        text: "No bitter at all 🚫",
+        value: { bitter: 0, sweet: 4 }
+      }
+    ]
+  },
+  {
+    id: 4,
+    question: "How strong do you like your drinks?",
+    options: [
+      {
+        text: "Extra strong! 💪",
+        value: { strong: 5, bitter: 2 }
+      },
+      {
+        text: "Moderately strong 🥃",
+        value: { strong: 3, bitter: 1 }
+      },
+      {
+        text: "Light and easy 🍷",
+        value: { strong: 2, sweet: 2 }
+      },
+      {
+        text: "Very mild 🌱",
+        value: { strong: 1, sweet: 3 }
+      }
+    ]
+  },
+  {
+    id: 5,
+    question: "What's your ideal drink style?",
+    options: [
+      {
+        text: "Complex and bold 🌟",
+        value: { strong: 4, bitter: 3 }
+      },
+      {
+        text: "Balanced and smooth 🎭",
+        value: { sweet: 3, sour: 3 }
+      },
+      {
+        text: "Light and refreshing 🌊",
+        value: { sweet: 2, sour: 2 }
+      },
+      {
+        text: "Sweet and fruity 🍓",
+        value: { sweet: 4, sour: 2 }
+      }
+    ]
+  }
 ];
 
 export function TasteProfileQuiz({ onComplete }: TasteProfileQuizProps) {
@@ -188,10 +275,7 @@ export function TasteProfileQuiz({ onComplete }: TasteProfileQuizProps) {
 
         <div className="text-center mt-8">
           <button
-            onClick={() => {
-              onComplete?.();
-              navigate('/menu');
-            }}
+            onClick={() => navigate('/menu')}
             className="bg-purple-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-purple-700 transition-colors"
           >
             View Full Menu
