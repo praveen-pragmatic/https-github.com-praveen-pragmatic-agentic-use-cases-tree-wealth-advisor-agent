@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
-import type { TasteProfile, Cocktail } from '../types';
+import { CocktailCard } from './CocktailCard';
+import type { TasteProfile } from '../types';
 import { cocktails } from '../data/cocktails';
-
-interface TasteProfileQuizProps {
-  onComplete?: () => void;
-}
 
 const quizQuestions = [
   {
@@ -122,7 +119,7 @@ const quizQuestions = [
   }
 ];
 
-export function TasteProfileQuiz({ onComplete }: TasteProfileQuizProps) {
+export function TasteProfileQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [tasteProfile, setTasteProfile] = useState<TasteProfile>({
     sweet: 0,
@@ -133,31 +130,7 @@ export function TasteProfileQuiz({ onComplete }: TasteProfileQuizProps) {
   const [showRecommendations, setShowRecommendations] = useState(false);
   
   const navigate = useNavigate();
-  const [user, setUser, addOrder] = useStore((state) => [
-    state.user,
-    state.setUser,
-    state.addOrder
-  ]);
-
-  const handleOrder = (cocktail: Cocktail) => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-
-    const order = {
-      id: `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      userId: user.id,
-      userName: user.name,
-      cocktailId: cocktail.id,
-      cocktailName: cocktail.name,
-      status: 'pending',
-      timestamp: new Date().toISOString(),
-    };
-    
-    addOrder(order);
-    navigate('/orders');
-  };
+  const [user, setUser] = useStore((state) => [state.user, state.setUser]);
 
   const handleAnswer = (values: Partial<TasteProfile>) => {
     const updatedProfile = { ...tasteProfile };
@@ -216,9 +189,6 @@ export function TasteProfileQuiz({ onComplete }: TasteProfileQuizProps) {
 
   if (showRecommendations) {
     const recommendations = getRecommendations();
-    const hasActiveOrder = useStore((state) => 
-      user ? state.hasActiveOrder(user.id) : false
-    );
     
     return (
       <div className="space-y-8">
@@ -232,44 +202,12 @@ export function TasteProfileQuiz({ onComplete }: TasteProfileQuizProps) {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {recommendations.map((cocktail, index) => (
-            <motion.div
+          {recommendations.map((cocktail) => (
+            <CocktailCard
               key={cocktail.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2 }}
-              className="bg-white p-6 rounded-lg shadow-md"
-            >
-              <img
-                src={cocktail.imageUrl}
-                alt={cocktail.name}
-                className="w-full h-48 object-cover rounded-lg mb-4"
-              />
-              <h4 className="text-xl font-semibold mb-2">{cocktail.name}</h4>
-              <p className="text-gray-600 mb-4">{cocktail.description}</p>
-              <div className="flex flex-col gap-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-purple-600 font-medium">
-                    {Math.round((cocktail.matchScore / 20) * 100)}% Match
-                  </span>
-                </div>
-                <button
-                  onClick={() => handleOrder(cocktail)}
-                  disabled={!user || hasActiveOrder}
-                  className={`w-full px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    !user || hasActiveOrder
-                      ? 'bg-gray-300 cursor-not-allowed text-gray-600'
-                      : 'bg-purple-600 text-white hover:bg-purple-700'
-                  }`}
-                >
-                  {!user 
-                    ? 'Login to Order' 
-                    : hasActiveOrder 
-                    ? 'Complete Current Order First'
-                    : 'Order Now'}
-                </button>
-              </div>
-            </motion.div>
+              cocktail={cocktail}
+              onOrder={(cocktail) => navigate('/menu')}
+            />
           ))}
         </div>
 
