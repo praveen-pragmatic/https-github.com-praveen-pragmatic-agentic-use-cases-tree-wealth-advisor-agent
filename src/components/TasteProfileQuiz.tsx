@@ -5,6 +5,10 @@ import { useStore } from '../store/useStore';
 import type { TasteProfile } from '../types';
 import { cocktails } from '../data/cocktails';
 
+interface TasteProfileQuizProps {
+  onComplete?: () => void;
+}
+
 const quizQuestions = [
   {
     id: 1,
@@ -96,7 +100,7 @@ const quizQuestions = [
   }
 ];
 
-export function TasteProfileQuiz() {
+export function TasteProfileQuiz({ onComplete }: TasteProfileQuizProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [tasteProfile, setTasteProfile] = useState<TasteProfile>({
     sweet: 0,
@@ -129,7 +133,7 @@ export function TasteProfileQuiz() {
         {} as TasteProfile
       );
 
-      // Update user preferences
+      // Update user preferences if logged in
       if (user) {
         setUser({
           ...user,
@@ -139,7 +143,7 @@ export function TasteProfileQuiz() {
           },
         });
       }
-      
+
       setTasteProfile(normalizedProfile);
       setShowRecommendations(true);
     }
@@ -147,6 +151,7 @@ export function TasteProfileQuiz() {
 
   const getRecommendations = () => {
     return cocktails
+      .filter(cocktail => cocktail.available)
       .map(cocktail => {
         const matchScore = Object.entries(tasteProfile).reduce((score, [key, value]) => {
           const cocktailValue = cocktail.tasteProfile[key as keyof TasteProfile];
@@ -204,7 +209,10 @@ export function TasteProfileQuiz() {
 
         <div className="text-center mt-8">
           <button
-            onClick={() => navigate('/menu')}
+            onClick={() => {
+              onComplete?.();
+              navigate('/menu');
+            }}
             className="bg-purple-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-purple-700 transition-colors"
           >
             View Full Menu

@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Sparkles, Clock, Award, Wine } from 'lucide-react';
 import { TasteProfileQuiz } from '../components/TasteProfileQuiz';
 
 export function Home() {
   const [showQuiz, setShowQuiz] = useState(false);
+  const navigate = useNavigate();
+
+  const handleQuizComplete = () => {
+    navigate('/menu');
+  };
 
   return (
     <div className="space-y-16">
@@ -62,7 +67,7 @@ export function Home() {
                 based on your preferences. We'll match you with drinks that suit your palate perfectly.
               </p>
             </div>
-            <TasteProfileQuiz />
+            <TasteProfileQuiz onComplete={handleQuizComplete} />
           </div>
         </section>
       ) : (
