@@ -156,7 +156,7 @@ export function TasteProfileQuiz() {
         {} as TasteProfile
       );
 
-      // Update user preferences if logged in
+      // Update user preferences
       if (user) {
         setUser({
           ...user,
@@ -185,6 +185,7 @@ export function TasteProfileQuiz() {
       timestamp: new Date().toISOString(),
     };
     
+    console.log('Creating new order:', order);
     addOrder(order);
     navigate('/orders');
   };
