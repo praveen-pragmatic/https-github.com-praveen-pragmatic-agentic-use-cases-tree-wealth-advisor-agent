@@ -33,7 +33,6 @@ export function Menu() {
       menuItemName: 'category' in item ? item.name : undefined,
       status: 'pending',
       timestamp: new Date().toISOString(),
-      price: item.price,
     };
     
     console.log('Creating new order:', order);
@@ -52,7 +51,7 @@ export function Menu() {
             Take our quick quiz to help us understand your taste preferences
           </p>
         </div>
-        <TasteProfileQuiz />
+        <TasteProfileQuiz onComplete={() => setShowQuiz(false)} />
       </div>
     );
   }
@@ -65,14 +64,12 @@ export function Menu() {
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
           Welcome, {user.name}!
         </h1>
-        {!user.preferences.tasteProfile && (
-          <button
-            onClick={() => setShowQuiz(true)}
-            className="text-purple-600 hover:text-purple-700 font-medium"
-          >
-            Take our taste quiz for personalized recommendations
-          </button>
-        )}
+        <button
+          onClick={() => setShowQuiz(true)}
+          className="text-purple-600 hover:text-purple-700 font-medium"
+        >
+          Take our taste quiz for personalized recommendations
+        </button>
         <div className="flex justify-center gap-4 mt-4">
           <button
             onClick={() => setActiveTab('drinks')}

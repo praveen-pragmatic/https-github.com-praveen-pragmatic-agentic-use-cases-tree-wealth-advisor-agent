@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Sparkles, Clock, Award } from 'lucide-react';
 import { useStore } from '../store/useStore';
-import { TasteProfileQuiz } from '../components/TasteProfileQuiz';
 
 export function Home() {
-  const [showQuiz, setShowQuiz] = useState(false);
   const user = useStore((state) => state.user);
 
   return (
@@ -33,81 +31,52 @@ export function Home() {
               Experience the perfect blend of tradition and innovation with our
               handcrafted cocktails and exquisite cuisine.
             </p>
-            {user ? (
-              <div className="flex gap-4">
-                <button
-                  onClick={() => setShowQuiz(true)}
-                  className="bg-purple-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-purple-700 transition-colors"
-                >
-                  Find Your Perfect Drink
-                </button>
-                <Link
-                  to="/menu"
-                  className="bg-white text-purple-600 px-8 py-3 rounded-lg text-lg font-medium hover:bg-gray-100 transition-colors"
-                >
-                  View Full Menu
-                </Link>
-              </div>
-            ) : (
-              <p className="text-2xl font-light italic">
-                Enjoy
-              </p>
+            {!user && (
+              <Link
+                to="/login"
+                className="bg-purple-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-purple-700 transition-colors inline-block"
+              >
+                Login to Order
+              </Link>
             )}
           </motion.div>
         </div>
       </section>
 
-      {user && showQuiz ? (
-        <section className="container mx-auto px-4">
-          <div className="bg-purple-50 rounded-xl p-8 shadow-lg">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Discover Your Perfect Cocktail
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Take our quick taste profile quiz to get personalized cocktail recommendations
-                based on your preferences. We'll match you with drinks that suit your palate perfectly.
-              </p>
-            </div>
-            <TasteProfileQuiz />
-          </div>
-        </section>
-      ) : (
-        <section className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="bg-white p-6 rounded-xl shadow-md"
-            >
-              <Sparkles className="h-12 w-12 text-purple-600 mb-4" />
-              <h3 className="text-xl font-bold mb-2">Premium Quality</h3>
-              <p className="text-gray-600">
-                We use only the finest ingredients in our cocktails and dishes.
-              </p>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="bg-white p-6 rounded-xl shadow-md"
-            >
-              <Clock className="h-12 w-12 text-purple-600 mb-4" />
-              <h3 className="text-xl font-bold mb-2">Quick Service</h3>
-              <p className="text-gray-600">
-                Order from your table and we'll prepare your items right away.
-              </p>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="bg-white p-6 rounded-xl shadow-md"
-            >
-              <Award className="h-12 w-12 text-purple-600 mb-4" />
-              <h3 className="text-xl font-bold mb-2">Expert Craftsmanship</h3>
-              <p className="text-gray-600">
-                Our skilled team crafts each item with precision and care.
-              </p>
-            </motion.div>
-          </div>
-        </section>
-      )}
+      <section className="container mx-auto px-4">
+        <div className="grid md:grid-cols-3 gap-8">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="bg-white p-6 rounded-xl shadow-md"
+          >
+            <Sparkles className="h-12 w-12 text-purple-600 mb-4" />
+            <h3 className="text-xl font-bold mb-2">Premium Quality</h3>
+            <p className="text-gray-600">
+              We use only the finest ingredients in our cocktails and dishes.
+            </p>
+          </motion.div>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="bg-white p-6 rounded-xl shadow-md"
+          >
+            <Clock className="h-12 w-12 text-purple-600 mb-4" />
+            <h3 className="text-xl font-bold mb-2">Quick Service</h3>
+            <p className="text-gray-600">
+              Order from your table and we'll prepare your items right away.
+            </p>
+          </motion.div>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="bg-white p-6 rounded-xl shadow-md"
+          >
+            <Award className="h-12 w-12 text-purple-600 mb-4" />
+            <h3 className="text-xl font-bold mb-2">Expert Craftsmanship</h3>
+            <p className="text-gray-600">
+              Our skilled team crafts each item with precision and care.
+            </p>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }
