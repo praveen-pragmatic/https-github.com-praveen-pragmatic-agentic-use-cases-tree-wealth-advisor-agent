@@ -19,12 +19,6 @@ export function Navigation() {
           </Link>
 
           <div className="flex items-center space-x-4">
-            <Link
-              to="/menu"
-              className="text-gray-600 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Menu
-            </Link>
             {user ? (
               <>
                 {user.role === 'admin' && (
