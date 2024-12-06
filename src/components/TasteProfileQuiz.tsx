@@ -130,7 +130,11 @@ export function TasteProfileQuiz() {
   const [showRecommendations, setShowRecommendations] = useState(false);
   
   const navigate = useNavigate();
-  const [user, setUser] = useStore((state) => [state.user, state.setUser]);
+  const [user, setUser, addOrder] = useStore((state) => [
+    state.user,
+    state.setUser,
+    state.addOrder
+  ]);
 
   const handleAnswer = (values: Partial<TasteProfile>) => {
     const updatedProfile = { ...tasteProfile };
@@ -166,6 +170,23 @@ export function TasteProfileQuiz() {
       setTasteProfile(normalizedProfile);
       setShowRecommendations(true);
     }
+  };
+
+  const handleOrder = (cocktail: any) => {
+    if (!user) return;
+
+    const order = {
+      id: `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      userId: user.id,
+      userName: user.name,
+      cocktailId: cocktail.id,
+      cocktailName: cocktail.name,
+      status: 'pending',
+      timestamp: new Date().toISOString(),
+    };
+    
+    addOrder(order);
+    navigate('/orders');
   };
 
   const getRecommendations = () => {
@@ -206,7 +227,7 @@ export function TasteProfileQuiz() {
             <CocktailCard
               key={cocktail.id}
               cocktail={cocktail}
-              onOrder={(cocktail) => navigate('/menu')}
+              onOrder={handleOrder}
             />
           ))}
         </div>
