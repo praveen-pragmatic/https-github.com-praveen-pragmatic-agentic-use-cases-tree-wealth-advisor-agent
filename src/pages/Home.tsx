@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, Clock, Award, Wine } from 'lucide-react';
+import { Sparkles, Clock, Award } from 'lucide-react';
+import { useStore } from '../store/useStore';
 import { TasteProfileQuiz } from '../components/TasteProfileQuiz';
 
 export function Home() {
   const [showQuiz, setShowQuiz] = useState(false);
-  const navigate = useNavigate();
-
-  const handleQuizComplete = () => {
-    navigate('/menu');
-  };
+  const user = useStore((state) => state.user);
 
   return (
     <div className="space-y-16">
@@ -36,29 +33,34 @@ export function Home() {
               Experience the perfect blend of tradition and innovation with our
               handcrafted cocktails and exquisite cuisine.
             </p>
-            <div className="flex gap-4">
-              <button
-                onClick={() => setShowQuiz(true)}
-                className="bg-purple-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-purple-700 transition-colors"
-              >
-                Find Your Perfect Drink
-              </button>
-              <Link
-                to="/menu"
-                className="bg-white text-purple-600 px-8 py-3 rounded-lg text-lg font-medium hover:bg-gray-100 transition-colors"
-              >
-                View Full Menu
-              </Link>
-            </div>
+            {user ? (
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setShowQuiz(true)}
+                  className="bg-purple-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-purple-700 transition-colors"
+                >
+                  Find Your Perfect Drink
+                </button>
+                <Link
+                  to="/menu"
+                  className="bg-white text-purple-600 px-8 py-3 rounded-lg text-lg font-medium hover:bg-gray-100 transition-colors"
+                >
+                  View Full Menu
+                </Link>
+              </div>
+            ) : (
+              <p className="text-2xl font-light italic">
+                Enjoy
+              </p>
+            )}
           </motion.div>
         </div>
       </section>
 
-      {showQuiz ? (
+      {user && showQuiz ? (
         <section className="container mx-auto px-4">
           <div className="bg-purple-50 rounded-xl p-8 shadow-lg">
             <div className="text-center mb-8">
-              <Wine className="h-12 w-12 text-purple-600 mx-auto mb-4" />
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 Discover Your Perfect Cocktail
               </h2>
@@ -67,7 +69,7 @@ export function Home() {
                 based on your preferences. We'll match you with drinks that suit your palate perfectly.
               </p>
             </div>
-            <TasteProfileQuiz onComplete={handleQuizComplete} />
+            <TasteProfileQuiz />
           </div>
         </section>
       ) : (
