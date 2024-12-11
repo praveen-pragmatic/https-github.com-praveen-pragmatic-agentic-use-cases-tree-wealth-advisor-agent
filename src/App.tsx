@@ -1,44 +1,22 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Layout } from './components/Layout';
-import { Home } from './pages/Home';
-import { Menu } from './pages/Menu';
-import { Orders } from './pages/Orders';
-import { Profile } from './pages/Profile';
-import { Login } from './pages/Login';
-import { Admin } from './pages/Admin';
-import { useStore } from './store/useStore';
+import Header from './components/layout/Header';
+import Hero from './components/sections/Hero';
+import Services from './components/sections/Services';
+import About from './components/sections/About';
+import Testimonials from './components/sections/Testimonials';
 
-function ProtectedAdminRoute({ children }: { children: React.ReactNode }) {
-  const user = useStore((state) => state.user);
-  
-  if (!user || user.role !== 'admin') {
-    return <Navigate to="/" replace />;
-  }
-  
-  return <>{children}</>;
-}
-
-export default function App() {
+function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="menu" element={<Menu />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="login" element={<Login />} />
-          <Route
-            path="admin"
-            element={
-              <ProtectedAdminRoute>
-                <Admin />
-              </ProtectedAdminRoute>
-            }
-          />
-        </Route>
-      </Routes>
-    </Router>
+    <div className="min-h-screen bg-white">
+      <Header />
+      <div className="pt-16">
+        <Hero />
+        <Services />
+        <About />
+        <Testimonials />
+      </div>
+    </div>
   );
 }
+
+export default App;
